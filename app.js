@@ -9,8 +9,9 @@ bot.on("polling_error", (msg) => console.log(msg));
 bot.on('message', async (msg) => {
     const chatId = msg.chat.id;
     let text = msg.text ? msg.text : '';
+    let network = text.split(' ');
 
     if (text.includes('/gas')) {
-        bot.sendMessage(chatId, await FUNCTIONS.getGasPrices());
+        bot.sendMessage(chatId, await FUNCTIONS.getGasPrices(network[1] ? network[1] : ''));
     }
 });
