@@ -12,6 +12,7 @@ async function getGasPrices(network = '') {
             network = "polygon"
             break;
         case "bnb":
+        case "bsc":
         case "binance":
             network = "binance-smart-chain"
             break;
@@ -29,8 +30,6 @@ async function getGasPrices(network = '') {
 `
 }
 
-async function getHealthFactor(protocol, chain) {
-
-}
+async function getHealthFactor(protocol, network, address) {}
 
 module.exports = { getGasPrices }
