@@ -12,6 +12,13 @@ bot.on('message', async (msg) => {
     let network = text.split(' ');
 
     if (text.includes('/gas')) {
-        bot.sendMessage(chatId, await FUNCTIONS.getGasPrices(network[1] ? network[1] : ''));
+        bot.sendMessage(chatId, await FUNCTIONS.getGasPrices(network[1] ? network[1] : ''))
+        .then((result) => {
+            setTimeout(() => {
+                bot.deleteMessage(chatId, result.message_id)
+                bot.deleteMessage(chatId, msg.message_id)
+            }, 10 * 1000)
+        })
+        .catch(err => console.log(err))
     }
 });
