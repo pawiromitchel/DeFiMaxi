@@ -16,7 +16,6 @@ bot.on('message', async (msg) => {
         .then((result) => {
             setTimeout(() => {
                 bot.deleteMessage(chatId, result.message_id)
-                bot.deleteMessage(chatId, msg.message_id)
             }, 10 * 1000)
         })
         .catch(err => console.log(err))
