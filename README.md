@@ -2,4 +2,4 @@
 A bot for DeFi purposes, @defimaxi_bot
 
 # Usage
-- /gas - to get Ethereum current gas prices
+- /gas - to get current gas prices of eth, matic or polygon, binance
