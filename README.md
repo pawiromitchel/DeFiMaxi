@@ -3,3 +3,4 @@ A bot for DeFi purposes, @defimaxi_bot, I'm using the Zapper API https://docs.za
 
 # Usage
 - /gas - to get current gas prices of eth, matic or polygon, binance
+- /health - get health of your loan (/health polygon aave 0x..)
