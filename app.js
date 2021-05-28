@@ -17,7 +17,7 @@ bot.on('message', async (msg) => {
         .then((result) => {
             setTimeout(() => {
                 bot.deleteMessage(chatId, result.message_id)
-            }, 10 * 1000)
+            }, 3600000) // keep the message for 1 hour
         })
         .catch(err => console.log(err))
     }
