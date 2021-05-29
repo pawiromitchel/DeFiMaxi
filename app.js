@@ -50,19 +50,21 @@ bot.onText(/\/level (.+)/, (msg, match) => {
     const chatId = msg.chat.id;
     const gasPrice = match[1];
 
-    if(gasPrice !== "0") {
+    if (gasPrice) {
         const record = {
             chatId: chatId,
             gasPrice: gasPrice
         }
-    
+
         // save the config
         DB.setGasPrice(record);
-    
+
         // send back the matched "whatever" to the chat
         bot.sendMessage(chatId, `✅ Gas level set at ${gasPrice}\nSet limit at 0 to disable alerts`);
-    } else {
+    } else if (gasPrice === "0") {
         bot.sendMessage(chatId, `❌ Alert disabled`);
+    } else {
+        bot.sendMessage(chatId, `Give me a number to work with bro, are you dumb? 😂`)
     }
 });
 
