@@ -31,19 +31,6 @@ bot.on('message', async (msg) => {
             .catch(err => console.log(err))
     }
 
-    if (text.includes('/health')) {
-        let network = args[1];
-        let protocol = args[2];
-        let address = args[3];
-
-        // geen van ze mag leeg zijn
-        if (network && protocol && address) {
-            bot.sendMessage(chatId, await FUNCTIONS.getHealthFactor(protocol, network, address))
-        } else {
-            bot.sendMessage(chatId, 'Please provide the right parameters\nFor example /health polygon aave 0x...')
-        }
-    }
-
     // Set an level for Ethereum gas price
     if (text.includes('/level')) {
         const gasPrice = args[1];
@@ -66,11 +53,23 @@ bot.on('message', async (msg) => {
             DB.setGasPrice(record);
     
             // send back the matched "whatever" to the chat
-            bot.sendMessage(chatId, `✅ Gas level set at ${gasPrice}\nSet limit at 0 to disable alerts`);
+            bot.sendMessage(chatId, `✅ Gas level set at ${gasPrice} Gwei\nSet limit at 0 to disable alerts`);
         } else if (gasPrice === "0") {
             bot.sendMessage(chatId, `❌ Alert disabled`);
         } else {
             bot.sendMessage(chatId, `Give me a number to work with bro, are you dumb? 😂`)
+        }
+    }
+
+    // check health for different protocols
+    if (text.includes('/health')) {
+        let address = args[1];
+
+        // geen van ze mag leeg zijn
+        if (address) {
+            bot.sendMessage(chatId, await FUNCTIONS.getHealthFactor(address))
+        } else {
+            bot.sendMessage(chatId, 'Please provide your address after calling /health')
         }
     }
 });
@@ -89,7 +88,7 @@ cron.schedule('00 * * * *', async () => {
                 // 0 = recurring alerts
                 // 1 = once, then update 
                 if (r.recurring >= 0) {
-                    bot.sendMessage(r.chatId, `👀 Ppssst! Gas is at ${currentGas.fast.toFixed(1)} right now\nCheck /gas to make sure`)
+                    bot.sendMessage(r.chatId, `👀 Ppssst! Gas is at ${currentGas.fast.toFixed(1)} Gwei right now\nCheck /gas to make sure`)
                         .then((result) => {
                             setTimeout(() => {
                                 bot.deleteMessage(chatId, result.message_id)

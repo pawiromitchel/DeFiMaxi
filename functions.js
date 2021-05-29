@@ -27,19 +27,28 @@ async function getGasPrices(network = '') {
     return data;
 }
 
-async function getHealthFactor(protocol, network, address) {
+async function getHealthFactor(address) {
     let text = `::HEALTH FACTOR::\n`;
-    if(protocol === "aave" && network === "polygon") {
-        protocol = "aave-v2";
-        const res = await axios.get(`${ZAPPER_ENDPOINT}protocols/${protocol}/balances?addresses%5B%5D=${address}&network=${network}&api_key=${CONFIG.ZAPPER_API_KEY}`);
-        const data = res.data;
-        const health = (Object.values(data)[0].products[0].meta[0].value).toFixed(2);
-        text += `${health > 1 ? '🟢': '🔴'} ${protocol.toUpperCase()} on ${network.toUpperCase()}: ${health}`
-    } else {
-        return 'Sorry, @pawiromitchel did not teach me that yet';
-    }
-    
+
+    // Get AAVE on Polygon Health status
+    const aaveData = await getProtocolInfo(address, "aave-v2", "polygon");
+    let aavePolygonHealth = (Object.values(aaveData)[0].products[0].meta[0].value).toFixed(2);
+    if(aavePolygonHealth) text += `${aavePolygonHealth > 1.25 ? '🟢': '🔴'} ${"aave-v2".toUpperCase()} on ${"polygon".toUpperCase()}: ${aavePolygonHealth}`;
+
+    // Get MakerDAO Mainnet C-Ratio
     return text;
+}
+
+/**
+ * This function returns your wallet balance in that protocol, deposit, borrowed, debt, etc
+ * @param {string} address 0x...
+ * @param {string} protocol Protocol name like aave-v2, makerdao
+ * @param {string} network Network chain like ethereum, polygon, bsc
+ * @returns JSON object with wallet info in that protocol
+ */
+async function getProtocolInfo(address, protocol, network) {
+    const res = await axios.get(`${ZAPPER_ENDPOINT}protocols/${protocol}/balances?addresses%5B%5D=${address}&network=${network}&api_key=${CONFIG.ZAPPER_API_KEY}`);
+    return res.data;
 }
 
 module.exports = { getGasPrices, getHealthFactor }
