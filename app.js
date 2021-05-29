@@ -43,42 +43,40 @@ bot.on('message', async (msg) => {
             bot.sendMessage(chatId, 'Please provide the right parameters\nFor example /health polygon aave 0x...')
         }
     }
-});
 
-// Set an level for Ethereum gas price
-bot.onText(/\/level (.+)/, (msg, match) => {
-    const chatId = msg.chat.id;
-    const arg = match[1].split(" ");
-    const gasPrice = arg[0];
-    let recurring = arg[1];
+    // Set an level for Ethereum gas price
+    if (text.includes('/level')) {
+        const gasPrice = args[1];
+        let recurring = args[2];
 
-    if (recurring === "once") {
-        recurring = 1;
-    } else {
-        recurring = 0;
-    }
-
-    if (gasPrice) {
-        const record = {
-            chatId: chatId,
-            gasPrice: gasPrice,
-            recurring: recurring
+        if (recurring === "once") {
+            recurring = 1;
+        } else {
+            recurring = 0;
         }
-
-        // save the config
-        DB.setGasPrice(record);
-
-        // send back the matched "whatever" to the chat
-        bot.sendMessage(chatId, `✅ Gas level set at ${gasPrice}\nSet limit at 0 to disable alerts`);
-    } else if (gasPrice === "0") {
-        bot.sendMessage(chatId, `❌ Alert disabled`);
-    } else {
-        bot.sendMessage(chatId, `Give me a number to work with bro, are you dumb? 😂`)
+    
+        if (gasPrice) {
+            const record = {
+                chatId: chatId,
+                gasPrice: gasPrice,
+                recurring: recurring
+            }
+    
+            // save the config
+            DB.setGasPrice(record);
+    
+            // send back the matched "whatever" to the chat
+            bot.sendMessage(chatId, `✅ Gas level set at <b>${gasPrice}</b>\nSet limit at 0 to disable alerts`);
+        } else if (gasPrice === "0") {
+            bot.sendMessage(chatId, `❌ Alert disabled`);
+        } else {
+            bot.sendMessage(chatId, `Give me a number to work with bro, are you dumb? 😂`)
+        }
     }
 });
 
 // check gas every hour
-cron.schedule('* * * * *', async () => {
+cron.schedule('00 * * * *', async () => {
     // get eth gas price
     const currentGas = await FUNCTIONS.getGasPrices('eth');
     // get gas limits from users
