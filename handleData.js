@@ -16,6 +16,7 @@ async function setGasPrice(record) {
     let check = priceLimits.filter(r => r.chatId === record.chatId);
     if(check.length > 0) {
         check[0].gasPrice = record.gasPrice;
+        check[0].recurring = record.recurring;
     } else {
         priceLimits.push(record);
     }

@@ -48,12 +48,21 @@ bot.on('message', async (msg) => {
 // Set an level for Ethereum gas price
 bot.onText(/\/level (.+)/, (msg, match) => {
     const chatId = msg.chat.id;
-    const gasPrice = match[1];
+    const arg = match[1].split(" ");
+    const gasPrice = arg[0];
+    let recurring = arg[1];
+
+    if (recurring === "once") {
+        recurring = 1;
+    } else {
+        recurring = 0;
+    }
 
     if (gasPrice) {
         const record = {
             chatId: chatId,
-            gasPrice: gasPrice
+            gasPrice: gasPrice,
+            recurring: recurring
         }
 
         // save the config
@@ -69,7 +78,7 @@ bot.onText(/\/level (.+)/, (msg, match) => {
 });
 
 // check gas every hour
-cron.schedule('0 * * * *', async () => {
+cron.schedule('* * * * *', async () => {
     // get eth gas price
     const currentGas = await FUNCTIONS.getGasPrices('eth');
     // get gas limits from users
@@ -79,13 +88,23 @@ cron.schedule('0 * * * *', async () => {
     if (gasLimits.length > 0) {
         gasLimits.forEach(r => {
             if (r.gasPrice >= currentGas.fast) {
-                bot.sendMessage(r.chatId, `👀 Ppssst! Gas is at ${currentGas.fast.toFixed(1)} right now\nCheck /gas to make sure`)
-                    .then((result) => {
-                        setTimeout(() => {
-                            bot.deleteMessage(chatId, result.message_id)
-                        }, 3600000) // keep the message for 1 hour
-                    })
-                    .catch(err => console.log(err))
+                // 0 = recurring alerts
+                // 1 = once, then update 
+                if (r.recurring >= 0) {
+                    bot.sendMessage(r.chatId, `👀 Ppssst! Gas is at ${currentGas.fast.toFixed(1)} right now\nCheck /gas to make sure`)
+                        .then((result) => {
+                            setTimeout(() => {
+                                bot.deleteMessage(chatId, result.message_id)
+                            }, 3600000) // keep the message for 1 hour
+                        })
+                        .catch(err => console.log(err))
+
+                    // user wants only one alert
+                    if (r.recurring === 1) {
+                        r.gasPrice = "0";
+                        DB.setGasPrice(r);
+                    }
+                }
             }
         });
     } else {
