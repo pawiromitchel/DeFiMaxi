@@ -66,7 +66,7 @@ bot.on('message', async (msg) => {
             DB.setGasPrice(record);
     
             // send back the matched "whatever" to the chat
-            bot.sendMessage(chatId, `✅ Gas level set at <b>${gasPrice}</b>\nSet limit at 0 to disable alerts`);
+            bot.sendMessage(chatId, `✅ Gas level set at ${gasPrice}\nSet limit at 0 to disable alerts`);
         } else if (gasPrice === "0") {
             bot.sendMessage(chatId, `❌ Alert disabled`);
         } else {

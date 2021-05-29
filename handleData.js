@@ -8,6 +8,13 @@ async function getData() {
     return filtered;
 }
 
+async function getOne(chatId) {
+    let rawdata = fs.readFileSync("data.json");
+    let userStatus = JSON.parse(rawdata);
+    let filtered = userStatus.filter(r => r.chatId === chatId);
+    return filtered;
+}
+
 async function setGasPrice(record) {
     let rawdata = fs.readFileSync("data.json");
     let priceLimits = JSON.parse(rawdata);
@@ -23,4 +30,4 @@ async function setGasPrice(record) {
     fs.writeFileSync('data.json', JSON.stringify(priceLimits));
 }
 
-module.exports = { getData, setGasPrice }
+module.exports = { getData, getOne, setGasPrice }
