@@ -19,6 +19,7 @@
   "homepage": "https://github.com/pawiromitchel/DeFiMaxi#readme",
   "dependencies": {
     "axios": "^0.21.1",
+    "node-cron": "^3.0.0",
     "node-telegram-bot-api": "^0.53.0"
   }
 }

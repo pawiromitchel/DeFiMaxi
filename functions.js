@@ -24,11 +24,7 @@ async function getGasPrices(network = '') {
 
     const res = await axios.get(`${ZAPPER_ENDPOINT}gas-price?network=${network}&api_key=${CONFIG.ZAPPER_API_KEY}`);
     const data = res.data;
-    return `::GAS PRICES | ${network.toUpperCase()}::
-🟢 Instant: ${data.instant}
-🟡 Fast: ${data.fast}
-🔴 Standard: ${data.standard}
-`
+    return data;
 }
 
 async function getHealthFactor(protocol, network, address) {
