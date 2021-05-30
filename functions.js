@@ -2,7 +2,7 @@ const axios = require('axios');
 const CONFIG = require('./config');
 const ZAPPER_ENDPOINT = "https://api.zapper.fi/v1/";
 
-async function getGasPrices(network = '') {
+async function getGasPrices(network) {
     switch (network) {
         case "eth":
         case "ethereum":
@@ -18,13 +18,17 @@ async function getGasPrices(network = '') {
             network = "binance-smart-chain"
             break;
         default:
-            network = "ethereum"
+            network = false;
             break;
     }
 
-    const res = await axios.get(`${ZAPPER_ENDPOINT}gas-price?network=${network}&api_key=${CONFIG.ZAPPER_API_KEY}`);
-    const data = res.data;
-    return data;
+    if(network) {
+        const res = await axios.get(`${ZAPPER_ENDPOINT}gas-price?network=${network}&api_key=${CONFIG.ZAPPER_API_KEY}`);
+        const data = res.data;
+        return data;
+    } else {
+        return false;
+    }
 }
 
 async function getHealthFactor(address) {

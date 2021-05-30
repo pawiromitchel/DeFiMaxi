@@ -17,18 +17,19 @@ bot.on('message', async (msg) => {
     // Get gas price from eth, bsc or matic
     if (text.includes('/gas')) {
         let network = args[1] ? args[1] : 'ethereum';
-        let gasPrices = await FUNCTIONS.getGasPrices();
+        console.log(args[1]);
+        let gasPrices = await FUNCTIONS.getGasPrices(network);
 
-        bot.sendMessage(chatId, `::GAS PRICES | ${network.toUpperCase()}::
+        if(gasPrices) {
+            bot.sendMessage(chatId, `::GAS PRICES | ${network.toUpperCase()}::
 🟢 Instant: ${gasPrices.instant}
 🟡 Fast: ${gasPrices.fast}
 🔴 Standard: ${gasPrices.standard}`)
-            .then((result) => {
-                setTimeout(() => {
-                    bot.deleteMessage(chatId, result.message_id)
-                }, 3600000) // keep the message for 1 hour
-            })
-            .catch(err => console.log(err))
+                .catch(err => console.log(err))
+        } else {
+            bot.sendMessage(chatId, `Unsupported network`)
+        }
+
     }
 
     // Set an level for Ethereum gas price
@@ -41,17 +42,17 @@ bot.on('message', async (msg) => {
         } else {
             recurring = 0;
         }
-    
+
         if (gasPrice) {
             const record = {
                 chatId: chatId,
                 gasPrice: gasPrice,
                 recurring: recurring
             }
-    
+
             // save the config
             DB.setGasPrice(record);
-    
+
             // send back the matched "whatever" to the chat
             bot.sendMessage(chatId, `✅ Gas level set at ${gasPrice} Gwei\nSet limit at 0 to disable alerts`);
         } else if (gasPrice === "0") {
@@ -89,11 +90,6 @@ cron.schedule('00 * * * *', async () => {
                 // 1 = once, then update 
                 if (r.recurring >= 0) {
                     bot.sendMessage(r.chatId, `👀 Ppssst! Gas is at ${currentGas.fast.toFixed(1)} Gwei right now\nCheck /gas to make sure`)
-                        .then((result) => {
-                            setTimeout(() => {
-                                bot.deleteMessage(chatId, result.message_id)
-                            }, 3600000) // keep the message for 1 hour
-                        })
                         .catch(err => console.log(err))
 
                     // user wants only one alert
