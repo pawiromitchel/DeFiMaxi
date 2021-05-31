@@ -73,6 +73,13 @@ bot.on('message', async (msg) => {
             bot.sendMessage(chatId, 'Please provide your address after calling /health')
         }
     }
+
+    // send fear and greenindex
+    if (text.includes('/fear')) {
+        bot.sendPhoto(chatId, `https://alternative.me/crypto/fear-and-greed-index.png?a=${Date.now()}`, {
+            caption: "Source: https://alternative.me/crypto/fear-and-greed-index/"
+        })
+    }
 });
 
 // check gas every hour
