@@ -208,7 +208,7 @@ ChatRoom
         }
         await FUNCTIONS.screenshot(url, selector).then(photo => {
             bot.sendPhoto(chatId, photo, {
-                caption: "Source: https://defillama.com"
+                caption: `Source: ${url}`
             });
         });
     }
