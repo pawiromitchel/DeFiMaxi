@@ -129,7 +129,6 @@ bot.on('message', async (msg) => {
             // if there's no protocol specified, show all
             url = TVL;
         }
-        bot.sendMessage(chatId, `Aight G, getting data ...`);
         await FUNCTIONS.screenshot(url).then(photo => {
             bot.sendPhoto(chatId, photo, {
                 caption: "Source: https://defillama.com"
