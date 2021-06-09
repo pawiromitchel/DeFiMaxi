@@ -138,6 +138,38 @@ bot.on('message', async (msg) => {
                 case "staking":
                     url = `${MULTI}/staking`;
                     break;
+                case "eth":
+                case "ethereum":
+                    url = `https://defillama.com/chain/Ethereum`;
+                    selector = selectorDashboard;
+                    break;
+                case "bsc":
+                case "binance":
+                    url = `https://defillama.com/chain/Binance`;
+                    selector = selectorDashboard;
+                    break;
+                case "sol":
+                case "solana":
+                    url = `https://defillama.com/chain/Solana`;
+                    selector = selectorDashboard;
+                    break;
+                case "matic":
+                case "polygon":
+                    url = `https://defillama.com/chain/Polygon`;
+                    selector = selectorDashboard;
+                    break;
+                case "ftm":
+                    url = `https://defillama.com/chain/Fantom`;
+                    selector = selectorDashboard;
+                    break;
+                case "xdai":
+                    url = `https://defillama.com/chain/xDai`;
+                    selector = selectorDashboard;
+                    break;
+                case "rsk":
+                    url = `https://defillama.com/chain/RSK`;
+                    selector = selectorDashboard;
+                    break;
                 default:
                     url = `${ONE}/${args[1]}`;
                     selector = selectorSingle;
