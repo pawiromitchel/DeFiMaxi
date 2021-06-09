@@ -101,10 +101,9 @@ Borrowing Health or Ratio
 /health <address> - this will get your borrowing health from different protocols (work in progress)
 
 Fear and Green Index
-/fear - this will pull data from https://alternative.me/crypto/fear-and-greed-index/
+/fear
 
 Total Value Locked
-This pulls data from https://defillama.com/
 /tvl - this will show the total TVL across every chain / L2 / sidechain
 /tvl <network> - if you want to check the tvl of only xdai or matic
 /tvl <protocol> - if you wanna see the tvl of Aave for example
