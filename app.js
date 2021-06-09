@@ -83,7 +83,7 @@ bot.on('message', async (msg) => {
 
     // send a random chatroom
     if (text.includes('/chatroom')) {
-        bot.sendPhoto(chatId, `Anon room created at https://hack.chat/?${FUNCTIONS.randomString(10)}`);
+        bot.sendMessage(chatId, `Anon room created at https://hack.chat/?${FUNCTIONS.randomString(10)}`);
     }
 });
 
