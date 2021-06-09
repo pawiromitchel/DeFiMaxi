@@ -248,6 +248,26 @@ ChatRoom
                 });
             }).catch(err => bot.sendMessage(chatId, `Something went wrong: ${err}`));
     }
+
+    if (text.includes('/rekt')) {
+        bot.sendMessage(chatId, `Aight G 😉, getting data ...`)
+            .then((chat) => {
+                setTimeout(() => {
+                    bot.deleteMessage(chatId, chat.message_id)
+                }, 10 * 1000) // 10 sec
+            })
+            .catch(err => console.log(err));
+
+        const url = "https://www.rekt.news/leaderboard/";
+        let selector = "#__next > div > main > div > ol";
+
+        await FUNCTIONS.screenshot(url, selector)
+            .then(photo => {
+                bot.sendPhoto(chatId, photo, {
+                    caption: `DeFi Hacks Leaderboard, be careful out there sir 😘\nSource: ${url}`
+                });
+            }).catch(err => bot.sendMessage(chatId, `Something went wrong: ${err}`));
+    }
 });
 
 // check gas every hour
