@@ -105,9 +105,14 @@ async function screenshot(url, selector) {
         }
     });
     const name = `./screenshots/${Date.now()}.jpg`;
-
+    
     // 2. Open a new page
-    const page = await browser.newPage();
+    const page = (await browser.pages())[0];
+    
+    // set useragent to avoid bot detection
+    await page.setUserAgent(
+        'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.97 Safari/537.36'
+    );
 
     // 3. Navigate to URL
     await page.goto(url, { waitUntil: "networkidle0", timeout: 60000 });

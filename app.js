@@ -268,6 +268,26 @@ ChatRoom
                 });
             }).catch(err => bot.sendMessage(chatId, `Something went wrong: ${err}`));
     }
+
+    if (text.includes('/stocktoflow') || text.includes('/stf')) {
+        bot.sendMessage(chatId, `Aight G 😉, getting data ...`)
+            .then((chat) => {
+                setTimeout(() => {
+                    bot.deleteMessage(chatId, chat.message_id)
+                }, 10 * 1000) // 10 sec
+            })
+            .catch(err => console.log(err));
+
+        const url = "https://decentrader.com/charts/stock-to-flow-model/";
+        let selector = "#graph > div > div";
+
+        await FUNCTIONS.screenshot(url, selector)
+            .then(photo => {
+                bot.sendPhoto(chatId, photo, {
+                    caption: `Source: ${url}`
+                });
+            }).catch(err => bot.sendMessage(chatId, `Something went wrong: ${err}`));
+    }
 });
 
 // check gas every hour
