@@ -86,6 +86,56 @@ bot.on('message', async (msg) => {
         let name = args[1] ? args[1] : FUNCTIONS.randomString(10);
         bot.sendMessage(chatId, `Anon room created at https://hack.chat/?${name}`);
     }
+
+    // get TVL from defillama
+    if (text.includes('/tvl')) {
+        let TVL = "https://defillama.com/home";
+        let multi = "https://defillama.com/protocols";
+        let single = "https://defillama.com/protocol";
+        let url;
+        if(args[1]) {
+            switch (args[1]) {
+                case "all":
+                case "protocols":
+                    url = `${multi}/protocols`;
+                    break;
+                case "dex":
+                case "dexes":
+                    url = `${multi}/dexes`;
+                    break;
+                case "lending":
+                    url = `${multi}/lending`;
+                    break;
+                case "yield":
+                    url = `${multi}/yield`;
+                    break;
+                case "insurance":
+                    url = `${multi}/insurance`;
+                    break;
+                case "options":
+                    url = `${multi}/options`;
+                    break;
+                case "indexes":
+                    url = `${multi}/indexes`;
+                    break;
+                case "staking":
+                    url = `${multi}/staking`;
+                    break;
+                default:
+                    url = `${single}/${args[1]}`;
+                    break;
+            }
+        } else {
+            // if there's no protocol specified, show all
+            url = TVL;
+        }
+        bot.sendMessage(chatId, `Aight G, getting data ...`);
+        await FUNCTIONS.screenshot(url).then(photo => {
+            bot.sendPhoto(chatId, photo, {
+                caption: "Source: https://defillama.com"
+            });
+        });
+    }
 });
 
 // check gas every hour

@@ -1,4 +1,5 @@
 const axios = require('axios');
+const puppeteer = require('puppeteer');
 const CONFIG = require('./config');
 const ZAPPER_ENDPOINT = "https://api.zapper.fi/v1/";
 
@@ -66,4 +67,62 @@ function randomString(length) {
     return result;
 }
 
-module.exports = { getGasPrices, getHealthFactor, randomString }
+function getDate() {
+    let date_ob = new Date();
+    // current date
+    // adjust 0 before single digit date
+    let date = ("0" + date_ob.getDate()).slice(-2);
+
+    // current month
+    let month = ("0" + (date_ob.getMonth() + 1)).slice(-2);
+
+    // current year
+    let year = date_ob.getFullYear();
+
+    // current hours
+    let hours = date_ob.getHours();
+
+    // current minutes
+    let minutes = date_ob.getMinutes();
+
+    // current seconds
+    let seconds = date_ob.getSeconds();
+
+    // prints date
+    return (year + "-" + month + "-" + date + "_" + hours + ":" + minutes + ":" + seconds);
+}
+
+async function screenshot(url) {
+    console.log(url);
+    // 1. Launch the browser and set the resolution
+    const browser = await puppeteer.launch({
+        headless: true,
+        defaultViewport: {
+            // 4k resolution
+            width: 1024,
+            height: 720,
+            isLandscape: true
+        }
+    });
+    const name = `./screenshots/${Date.now()}.jpg`;
+
+    // 2. Open a new page
+    const page = await browser.newPage();
+
+    // 3. Navigate to URL
+    await page.goto(url, { waitUntil: "networkidle0", timeout: 60000 });
+
+    // 4. Take screenshot
+    await page.screenshot({
+        path: name,
+        type: "jpeg",
+        fullPage: false
+    });
+
+    await page.close();
+    await browser.close();
+
+    return name;
+}
+
+module.exports = { getGasPrices, getHealthFactor, randomString, screenshot }
