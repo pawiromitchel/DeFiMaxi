@@ -236,6 +236,7 @@ ChatRoom
                 selector = ETH;
                 break;
             default:
+                bot.sendMessage(chatId, `Sorry bro, I'm too dumb to know what you're saying 😢\nI'll show you BTC longs vs shorts instead, okay?`);
                 selector = BTC;
                 break;
         }
