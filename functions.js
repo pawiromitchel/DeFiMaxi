@@ -22,7 +22,7 @@ async function getGasPrices(network) {
             break;
     }
 
-    if(network) {
+    if (network) {
         const res = await axios.get(`${ZAPPER_ENDPOINT}gas-price?network=${network}&api_key=${CONFIG.ZAPPER_API_KEY}`);
         const data = res.data;
         return data;
@@ -37,7 +37,7 @@ async function getHealthFactor(address) {
     // Get AAVE on Polygon Health status
     const aaveData = await getProtocolInfo(address, "aave-v2", "polygon");
     let aavePolygonHealth = (Object.values(aaveData)[0].products[0].meta[0].value).toFixed(2);
-    if(aavePolygonHealth) text += `${aavePolygonHealth > 1.25 ? '🟢': '🔴'} ${"aave-v2".toUpperCase()} on ${"polygon".toUpperCase()}: ${aavePolygonHealth}`;
+    if (aavePolygonHealth) text += `${aavePolygonHealth > 1.25 ? '🟢' : '🔴'} ${"aave-v2".toUpperCase()} on ${"polygon".toUpperCase()}: ${aavePolygonHealth}`;
 
     // Get MakerDAO Mainnet C-Ratio
     return text;
@@ -55,4 +55,15 @@ async function getProtocolInfo(address, protocol, network) {
     return res.data;
 }
 
-module.exports = { getGasPrices, getHealthFactor }
+function randomString(length) {
+    var result = '';
+    var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()';
+    var charactersLength = characters.length;
+    for (var i = 0; i < length; i++) {
+        result += characters.charAt(Math.floor(Math.random() *
+            charactersLength));
+    }
+    return result;
+}
+
+module.exports = { getGasPrices, getHealthFactor, randomString }

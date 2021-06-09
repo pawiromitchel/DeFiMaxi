@@ -80,6 +80,11 @@ bot.on('message', async (msg) => {
             caption: "Source: https://alternative.me/crypto/fear-and-greed-index/"
         })
     }
+
+    // send a random chatroom
+    if (text.includes('/chatroom')) {
+        bot.sendPhoto(chatId, `Anon room created at https://hack.chat/?${FUNCTIONS.randomString(10)}`);
+    }
 });
 
 // check gas every hour
