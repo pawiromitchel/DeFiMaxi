@@ -87,6 +87,33 @@ bot.on('message', async (msg) => {
         bot.sendMessage(chatId, `Anon room created at https://hack.chat/?${name}`);
     }
 
+    // send info about the bot
+    if (text.includes('/info')) {
+        console.log(msg.from.first_name);
+        bot.sendMessage(chatId, `Hey ${msg.from.first_name},
+Wanna know what I can do?
+
+Gas prices
+/gas <chain> - get gas price from a specified chain, default will be ethereum
+/level <number> - get an alert when hourly gas price is below your target
+
+Borrowing Health or Ratio
+/health <address> - this will get your borrowing health from different protocols (work in progress)
+
+Fear and Green Index
+/fear - this will pull data from https://alternative.me/crypto/fear-and-greed-index/
+
+Total Value Locked
+This pulls data from https://defillama.com/
+/tvl - this will show the total TVL across every chain / L2 / sidechain
+/tvl <network> - if you want to check the tvl of only xdai or matic
+/tvl <protocol> - if you wanna see the tvl of Aave for example
+/tvl <group> - check tvl of specific groups like protocols, staking, lending, options, insurance, indexes
+
+ChatRoom
+/room <roomname> - this will generate a random room on hack.chat to chat fully anon mode`);
+    }
+
     // get TVL from defillama
     if (text.includes('/tvl')) {
         bot.sendMessage(chatId, `Aight G 😉, getting data ...`)
