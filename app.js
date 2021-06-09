@@ -89,7 +89,6 @@ bot.on('message', async (msg) => {
 
     // send info about the bot
     if (text.includes('/info')) {
-        console.log(msg.from.first_name);
         bot.sendMessage(chatId, `Hey ${msg.from.first_name},
 Wanna know what I can do?
 
@@ -211,6 +210,42 @@ ChatRoom
                 caption: `Source: ${url}`
             });
         });
+    }
+
+    if (text.includes('/longvsshorts')) {
+        bot.sendMessage(chatId, `Aight G 😉, getting data ...`)
+            .then((chat) => {
+                setTimeout(() => {
+                    bot.deleteMessage(chatId, chat.message_id)
+                }, 10 * 1000) // 10 sec
+            })
+            .catch(err => console.log(err));
+
+        const url = "https://blockchainwhispers.com/bitmex-position-calculator";
+        const BTC = "body > section > div > div:nth-child(3)";
+        const ETH = "body > section > div > div.bcw-calculator-longs-shorts.eth.my-3";
+        let selector;
+
+        switch (args[1]) {
+            case 'btc':
+            case 'bitcoin':
+                selector = BTC;
+                break;
+            case 'eth':
+            case 'ethereum':
+                selector = ETH;
+                break;
+            default:
+                selector = BTC;
+                break;
+        }
+
+        await FUNCTIONS.screenshot(url, selector)
+            .then(photo => {
+                bot.sendPhoto(chatId, photo, {
+                    caption: `Source: ${url}`
+                });
+            }).catch(err => bot.sendMessage(chatId, `Something went wrong: ${err}`));
     }
 });
 
