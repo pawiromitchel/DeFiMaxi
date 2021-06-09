@@ -97,6 +97,7 @@ async function screenshot(url) {
     // 1. Launch the browser and set the resolution
     const browser = await puppeteer.launch({
         headless: true,
+        args: ["--no-sandbox"],
         defaultViewport: {
             // 4k resolution
             width: 1024,
