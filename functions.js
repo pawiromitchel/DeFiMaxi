@@ -92,16 +92,15 @@ function getDate() {
     return (year + "-" + month + "-" + date + "_" + hours + ":" + minutes + ":" + seconds);
 }
 
-async function screenshot(url) {
-    console.log(url);
+async function screenshot(url, selector) {
     // 1. Launch the browser and set the resolution
     const browser = await puppeteer.launch({
         headless: true,
         args: ["--no-sandbox"],
         defaultViewport: {
             // 4k resolution
-            width: 1024,
-            height: 720,
+            width: 1920,
+            height: 1080,
             isLandscape: true
         }
     });
@@ -112,9 +111,12 @@ async function screenshot(url) {
 
     // 3. Navigate to URL
     await page.goto(url, { waitUntil: "networkidle0", timeout: 60000 });
+    // wait for the selector to load
+    await page.waitForSelector(selector);
+    const selection = await page.$(selector);
 
     // 4. Take screenshot
-    await page.screenshot({
+    await selection.screenshot({
         path: name,
         type: "jpeg",
         fullPage: false

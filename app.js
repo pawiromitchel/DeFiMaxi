@@ -20,7 +20,7 @@ bot.on('message', async (msg) => {
         console.log(args[1]);
         let gasPrices = await FUNCTIONS.getGasPrices(network);
 
-        if(gasPrices) {
+        if (gasPrices) {
             bot.sendMessage(chatId, `::GAS PRICES | ${network.toUpperCase()}::
 🟢 Instant: ${gasPrices.instant}
 🟡 Fast: ${gasPrices.fast}
@@ -89,47 +89,66 @@ bot.on('message', async (msg) => {
 
     // get TVL from defillama
     if (text.includes('/tvl')) {
-        let TVL = "https://defillama.com/home";
-        let multi = "https://defillama.com/protocols";
-        let single = "https://defillama.com/protocol";
+        bot.sendMessage(chatId, `Aight G 😉, getting data ...`)
+            .then((chat) => {
+                setTimeout(() => {
+                    bot.deleteMessage(chatId, chat.message_id)
+                }, 10 * 1000) // 10 sec
+            })
+            .catch(err => console.log(err));
+
         let url;
-        if(args[1]) {
+        let selector;
+
+        // url paths
+        const TVL = "https://defillama.com/home";
+        const MULTI = "https://defillama.com/protocols";
+        const ONE = "https://defillama.com/protocol";
+
+        // selectors to get data
+        let selectorTables = "#center > div > div > div.sc-fYxtnH.cXooYa.css-vurnku";
+        let selectorDashboard = "#center > div > div.sc-ckVGcZ.bDWbWv > div > div.sc-ifAKCX.sc-bZQynM.sc-dnqmqq.kYubLu";
+        let selectorSingle = "#center > div > div.sc-ckVGcZ.bDWbWv > div.sc-feJyhm.dBBDPo > div.sc-iELTvK.ifHHTx";
+
+        if (args[1]) {
+            selector = selectorTables;
             switch (args[1]) {
-                case "all":
                 case "protocols":
-                    url = `${multi}/protocols`;
+                    url = `${MULTI}/protocols`;
                     break;
                 case "dex":
                 case "dexes":
-                    url = `${multi}/dexes`;
+                    url = `${MULTI}/dexes`;
                     break;
                 case "lending":
-                    url = `${multi}/lending`;
+                    url = `${MULTI}/lending`;
                     break;
                 case "yield":
-                    url = `${multi}/yield`;
+                    url = `${MULTI}/yield`;
                     break;
                 case "insurance":
-                    url = `${multi}/insurance`;
+                    url = `${MULTI}/insurance`;
                     break;
                 case "options":
-                    url = `${multi}/options`;
+                    url = `${MULTI}/options`;
                     break;
                 case "indexes":
-                    url = `${multi}/indexes`;
+                    url = `${MULTI}/indexes`;
                     break;
                 case "staking":
-                    url = `${multi}/staking`;
+                    url = `${MULTI}/staking`;
                     break;
                 default:
-                    url = `${single}/${args[1]}`;
+                    url = `${ONE}/${args[1]}`;
+                    selector = selectorSingle;
                     break;
             }
         } else {
             // if there's no protocol specified, show all
             url = TVL;
+            selector = selectorDashboard;
         }
-        await FUNCTIONS.screenshot(url).then(photo => {
+        await FUNCTIONS.screenshot(url, selector).then(photo => {
             bot.sendPhoto(chatId, photo, {
                 caption: "Source: https://defillama.com"
             });
