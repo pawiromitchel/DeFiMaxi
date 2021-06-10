@@ -96,13 +96,13 @@ What can I, DeFiHelper 😎, do for you?
 /gas <chain> - get gas price from a specified chain, default will be ethereum
 /level <number> - get an alert when hourly gas price is below your target
 
-Borrowing Health or Ratio
+💳 Borrowing Health or Ratio
 /health <address> - this will get your borrowing health from different protocols (work in progress)
 
 🩸 Fear and Green Index
 /fear
 
-💲 Total Value Locked
+💰 Total Value Locked
 /tvl - this will show the total TVL across every chain / L2 / sidechain
 /tvl <network> - if you want to check the tvl of only xdai or matic
 /tvl <protocol> - if you wanna see the tvl of Aave for example
