@@ -100,7 +100,9 @@ What can I, DeFiHelper 😎, do for you?
 /health <address> - this will get your borrowing health from different protocols (work in progress)
 
 🩸 Fear and Green Index
-/fear
+/fear - check how emotional people are in the market.
+        Extreme fear = buying opportunity
+        Extreme greed = correction coming
 
 💰 Total Value Locked
 /tvl - this will show the total TVL across every chain / L2 / sidechain
