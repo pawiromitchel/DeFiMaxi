@@ -89,37 +89,40 @@ bot.on('message', async (msg) => {
 
     // send info about the bot
     if (text.includes('/info')) {
-        bot.sendMessage(chatId, `Hey ${msg.from.first_name},
-Wanna know what I can do?
+        bot.sendMessage(chatId, `Hello master ${msg.from.first_name} 👋,
+What can I, DeFiHelper 😎, do for you?
 
-Gas prices
+⛽ Gas prices
 /gas <chain> - get gas price from a specified chain, default will be ethereum
 /level <number> - get an alert when hourly gas price is below your target
 
 Borrowing Health or Ratio
 /health <address> - this will get your borrowing health from different protocols (work in progress)
 
-Fear and Green Index
+🩸 Fear and Green Index
 /fear
 
-Total Value Locked
+💲 Total Value Locked
 /tvl - this will show the total TVL across every chain / L2 / sidechain
 /tvl <network> - if you want to check the tvl of only xdai or matic
 /tvl <protocol> - if you wanna see the tvl of Aave for example
 /tvl <group> - check tvl of specific groups like protocols, staking, lending, options, insurance, indexes
 
-OnChain Data
-/stocktoflow - get Bitcoin Stock to Flow model made by PlanB
-/stf - alias of /stocktoflow
-/rekt - DeFi hacks leaderboard
+📅 Indicators & Data
+/stocktoflow | /stf - get Bitcoin Stock to Flow model made by PlanB
 /longvsshorts - get Long vs Shorts of BTC or ETH
+/ecocalendar - get economic calendar
+/rekt - DeFi hacks leaderboard
 /stakers - how many stakers does your blockchain have?
 /fees <protocol> - how much fees are people paying?
 /daotreasury - check what's on the balance sheet of your favorite DAO
-/ecocalendar - get economic calendar
 
-ChatRoom
-/room <roomname> - this will generate a random room on hack.chat to chat fully anon mode`);
+👀 ChatRoom
+/room <roomname> - this will generate a random room on hack.chat to chat fully anon mode
+
+On yeah, my creator is @pawiromitchel 🤗
+He's constantly teaching me new stuff, so be on the lookout for new functionalities
+`);
     }
 
     // get TVL from defillama
