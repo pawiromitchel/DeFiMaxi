@@ -113,6 +113,8 @@ OnChain Data
 /stf - alias of /stocktoflow
 /rekt - DeFi hacks leaderboard
 /longvsshorts - get Long vs Shorts of BTC or ETH
+/stakers - how many stakers does your blockchain have?
+/fees <protocol> - how much fees are people paying?
 
 ChatRoom
 /room <roomname> - this will generate a random room on hack.chat to chat fully anon mode`);
@@ -242,7 +244,7 @@ ChatRoom
                 selector = ETH;
                 break;
             default:
-                if(args[1] && !selector) {
+                if (args[1] && !selector) {
                     bot.sendMessage(chatId, `Sorry bro, I'm too dumb to know what you're saying 😢\nI'll show you BTC longs vs shorts instead, okay?`);
                 }
                 selector = BTC;
@@ -294,6 +296,55 @@ ChatRoom
             .then(photo => {
                 bot.sendPhoto(chatId, photo, {
                     caption: `Source: ${url}`
+                });
+            }).catch(err => bot.sendMessage(chatId, `Something went wrong: ${err}`));
+    }
+
+    if (text.includes('/stakers')) {
+        bot.sendMessage(chatId, `Aight G 😉, getting data ...`)
+            .then((chat) => {
+                setTimeout(() => {
+                    bot.deleteMessage(chatId, chat.message_id)
+                }, 10 * 1000) // 10 sec
+            })
+            .catch(err => console.log(err));
+
+        const url = "https://stakers.info/";
+        let selector = "#__next > div > main > div.jsx-3513597878.list";
+
+        await FUNCTIONS.screenshot(url, selector)
+            .then(photo => {
+                bot.sendPhoto(chatId, photo, {
+                    caption: `Source: ${url}`
+                });
+            }).catch(err => bot.sendMessage(chatId, `Something went wrong: ${err}`));
+    }
+
+    if (text.includes('/fees')) {
+        bot.sendMessage(chatId, `Aight G 😉, getting data ...`)
+            .then((chat) => {
+                setTimeout(() => {
+                    bot.deleteMessage(chatId, chat.message_id)
+                }, 10 * 1000) // 10 sec
+            })
+            .catch(err => console.log(err));
+
+        let url = "https://cryptofees.info/";
+        const ALL = "#__next > div > main > div.jsx-2013905549.list";
+        const ONE = "#__next > div > main";
+        let selector;
+
+        if (args[1]) {
+            selector = ONE;
+            url += `protocol/${args[1]}`;
+        } else {
+            selector = ALL;
+        }
+
+        await FUNCTIONS.screenshot(url, selector)
+            .then(photo => {
+                bot.sendPhoto(chatId, photo, {
+                    caption: `There's tons of crypto projects\nWhich ones are people actually paying to use?\nSource: ${url}`
                 });
             }).catch(err => bot.sendMessage(chatId, `Something went wrong: ${err}`));
     }
