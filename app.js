@@ -108,6 +108,12 @@ Total Value Locked
 /tvl <protocol> - if you wanna see the tvl of Aave for example
 /tvl <group> - check tvl of specific groups like protocols, staking, lending, options, insurance, indexes
 
+OnChain Data
+/stocktoflow - get Bitcoin Stock to Flow model made by PlanB
+/stf - alias of /stocktoflow
+/rekt - DeFi hacks leaderboard
+/longvsshorts - get Long vs Shorts of BTC or ETH
+
 ChatRoom
 /room <roomname> - this will generate a random room on hack.chat to chat fully anon mode`);
     }
