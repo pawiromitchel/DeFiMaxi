@@ -16,3 +16,4 @@ A bot for DeFi purposes, @defimaxi_bot, I'm using the Zapper API https://docs.za
 - /stakers - how many stakers does your blockchain have?
 - /fees - how much fees are people paying?
 - /daotreasury - check what's on the balance sheet of your favorite DAO
+- /ecocalendar - get economic calendar

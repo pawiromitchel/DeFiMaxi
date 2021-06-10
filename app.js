@@ -116,6 +116,7 @@ OnChain Data
 /stakers - how many stakers does your blockchain have?
 /fees <protocol> - how much fees are people paying?
 /daotreasury - check what's on the balance sheet of your favorite DAO
+/ecocalendar - get economic calendar
 
 ChatRoom
 /room <roomname> - this will generate a random room on hack.chat to chat fully anon mode`);
@@ -337,6 +338,26 @@ ChatRoom
             .then(photo => {
                 bot.sendPhoto(chatId, photo, {
                     caption: `Source: ${url}`
+                });
+            }).catch(err => bot.sendMessage(chatId, `Something went wrong: ${err}`));
+    }
+
+    if (text.includes('/ecocalendar')) {
+        bot.sendMessage(chatId, `Aight G 😉, getting data ...`)
+            .then((chat) => {
+                setTimeout(() => {
+                    bot.deleteMessage(chatId, chat.message_id)
+                }, 10 * 1000) // 10 sec
+            })
+            .catch(err => console.log(err));
+
+        const url = "https://global-premium.econoday.com/byweek.asp?cust=global-premium&lid=0";
+        let selector = "body > table > tbody > tr:nth-child(4) > td > table:nth-child(1)";
+
+        await FUNCTIONS.screenshot(url, selector)
+            .then(photo => {
+                bot.sendPhoto(chatId, photo, {
+                    caption: `Timezone is GMT -5:00 ET\nSource: ${url}`
                 });
             }).catch(err => bot.sendMessage(chatId, `Something went wrong: ${err}`));
     }
