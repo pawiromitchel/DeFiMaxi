@@ -280,8 +280,9 @@ ChatRoom
 
         const url = "https://decentrader.com/charts/stock-to-flow-model/";
         let selector = "#graph > div > div";
+        let cookieSelector = "#gdpr-cookie-accept";
 
-        await FUNCTIONS.screenshot(url, selector)
+        await FUNCTIONS.screenshot(url, selector, cookieSelector)
             .then(photo => {
                 bot.sendPhoto(chatId, photo, {
                     caption: `Source: ${url}`

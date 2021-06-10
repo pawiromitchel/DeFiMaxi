@@ -1,5 +1,7 @@
 const axios = require('axios');
-const puppeteer = require('puppeteer');
+const puppeteer = require('puppeteer-extra');
+const AdblockerPlugin = require('puppeteer-extra-plugin-adblocker')
+puppeteer.use(AdblockerPlugin())
 const CONFIG = require('./config');
 const ZAPPER_ENDPOINT = "https://api.zapper.fi/v1/";
 
@@ -92,23 +94,23 @@ function getDate() {
     return (year + "-" + month + "-" + date + "_" + hours + ":" + minutes + ":" + seconds);
 }
 
-async function screenshot(url, selector) {
+async function screenshot(url, selector, cookies = '') {
     // 1. Launch the browser and set the resolution
     const browser = await puppeteer.launch({
         headless: true,
         args: ["--no-sandbox"],
         defaultViewport: {
             // 4k resolution
-            width: 1920,
-            height: 1080,
+            width: 1366,
+            height: 768,
             isLandscape: true
         }
     });
     const name = `./screenshots/${Date.now()}.jpg`;
-    
+
     // 2. Open a new page
     const page = (await browser.pages())[0];
-    
+
     // set useragent to avoid bot detection
     await page.setUserAgent(
         'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.97 Safari/537.36'
@@ -116,6 +118,12 @@ async function screenshot(url, selector) {
 
     // 3. Navigate to URL
     await page.goto(url, { waitUntil: "networkidle0", timeout: 60000 });
+
+    if (cookies) {
+        await page.waitForSelector(cookies);
+        await page.click(cookies);
+    }
+
     // wait for the selector to load
     await page.waitForSelector(selector);
     const selection = await page.$(selector);
