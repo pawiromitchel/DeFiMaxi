@@ -101,8 +101,8 @@ async function screenshot(url, selector, cookies = '') {
         args: ["--no-sandbox"],
         defaultViewport: {
             // 4k resolution
-            width: 1366,
-            height: 768,
+            width: 1920,
+            height: 1080,
             isLandscape: true
         }
     });
@@ -117,7 +117,7 @@ async function screenshot(url, selector, cookies = '') {
     );
 
     // 3. Navigate to URL
-    await page.goto(url, { waitUntil: "networkidle0", timeout: 60000 });
+    await page.goto(url, { waitUntil: "networkidle0", timeout: 10000 });
 
     if (cookies) {
         await page.waitForSelector(cookies);
