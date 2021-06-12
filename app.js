@@ -112,7 +112,7 @@ What can I, DeFiHelper 😎, do for you?
 
 📅 Indicators & Data
 /stocktoflow | /stf - get Bitcoin Stock to Flow model made by PlanB
-/unrealized-profitandloss | /pnl - BTC Unrealized Profit/Loss
+/unrealized_profitandloss | /pnl - BTC Unrealized Profit/Loss
 /rhodl - check for market tops
 /longvsshorts - get Long vs Shorts of BTC or ETH
 /ecocalendar - get economic calendar
@@ -309,7 +309,7 @@ He's constantly teaching me new stuff, so be on the lookout for new functionalit
             }).catch(err => bot.sendMessage(chatId, `Something went wrong: ${err}`));
     }
 
-    if (text.includes('/unrealized-profitandloss') || text.includes('/pnl')) {
+    if (text.includes('/unrealized_profitandloss') || text.includes('/pnl')) {
         bot.sendMessage(chatId, `Aight G 😉, getting data ...`)
             .then((chat) => {
                 setTimeout(() => {
