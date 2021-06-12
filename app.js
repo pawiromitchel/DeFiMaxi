@@ -112,6 +112,8 @@ What can I, DeFiHelper 😎, do for you?
 
 📅 Indicators & Data
 /stocktoflow | /stf - get Bitcoin Stock to Flow model made by PlanB
+/unrealized-profitandloss | /pnl - BTC Unrealized Profit/Loss
+/rhodl - check for market tops
 /longvsshorts - get Long vs Shorts of BTC or ETH
 /ecocalendar - get economic calendar
 /rekt - DeFi hacks leaderboard
@@ -302,7 +304,49 @@ He's constantly teaching me new stuff, so be on the lookout for new functionalit
         await FUNCTIONS.screenshot(url, selector, cookieSelector)
             .then(photo => {
                 bot.sendPhoto(chatId, photo, {
-                    caption: `Source: ${url}`
+                    caption: `The stock-to-flow line on this chart incorporates a 365-day average into the model to smooth out the changes caused in the market by the halving events.\nSource: ${url}`
+                });
+            }).catch(err => bot.sendMessage(chatId, `Something went wrong: ${err}`));
+    }
+
+    if (text.includes('/unrealized-profitandloss') || text.includes('/pnl')) {
+        bot.sendMessage(chatId, `Aight G 😉, getting data ...`)
+            .then((chat) => {
+                setTimeout(() => {
+                    bot.deleteMessage(chatId, chat.message_id)
+                }, 10 * 1000) // 10 sec
+            })
+            .catch(err => console.log(err));
+
+        const url = "https://decentrader.com/charts/relative-unrealized-profit-loss/";
+        let selector = "#graph > div > div";
+        let cookieSelector = "#gdpr-cookie-accept";
+
+        await FUNCTIONS.screenshot(url, selector, cookieSelector)
+            .then(photo => {
+                bot.sendPhoto(chatId, photo, {
+                    caption: `When market cap rises much faster than profit taking we see that the market is overheating, one could say due to investor greed (red band). For the strategic investor such times have historically been favourable to take profit.\nSource: ${url}`
+                });
+            }).catch(err => bot.sendMessage(chatId, `Something went wrong: ${err}`));
+    }
+
+    if (text.includes('/rhodl')) {
+        bot.sendMessage(chatId, `Aight G 😉, getting data ...`)
+            .then((chat) => {
+                setTimeout(() => {
+                    bot.deleteMessage(chatId, chat.message_id)
+                }, 10 * 1000) // 10 sec
+            })
+            .catch(err => console.log(err));
+
+        const url = "https://decentrader.com/charts/rhodl-ratio/";
+        let selector = "#graph > div > div";
+        let cookieSelector = "#gdpr-cookie-accept";
+
+        await FUNCTIONS.screenshot(url, selector, cookieSelector)
+            .then(photo => {
+                bot.sendPhoto(chatId, photo, {
+                    caption: `RHODL ratio entering into the red band signals that the market is approaching the top of its cycle.  This has historically been a good time for investors to take profits in each cycle.\nSource: ${url}`
                 });
             }).catch(err => bot.sendMessage(chatId, `Something went wrong: ${err}`));
     }
