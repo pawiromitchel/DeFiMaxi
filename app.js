@@ -120,6 +120,7 @@ What can I, DeFiHelper 😎, do for you?
 /stakers - how many stakers does your blockchain have?
 /fees <protocol> - how much fees are people paying?
 /daotreasury - check what's on the balance sheet of your favorite DAO
+/burn - how much ETH is being burned right now
 
 👀 ChatRoom
 /room <roomname> - this will generate a random room on hack.chat to chat fully anon mode
@@ -436,6 +437,26 @@ He's constantly teaching me new stuff, so be on the lookout for new functionalit
             .then(photo => {
                 bot.sendPhoto(chatId, photo, {
                     caption: `There's tons of crypto projects\nWhich ones are people actually paying to use?\nSource: ${url}`
+                });
+            }).catch(err => bot.sendMessage(chatId, `Something went wrong: ${err}`));
+    }
+
+    if (text.includes('/burn')) {
+        bot.sendMessage(chatId, `Aight G 😉, getting data ...`)
+            .then((chat) => {
+                setTimeout(() => {
+                    bot.deleteMessage(chatId, chat.message_id)
+                }, 10 * 1000) // 10 sec
+            })
+            .catch(err => console.log(err));
+
+        const url = "https://etherchain.org/burn";
+        let selector = "#app > div.card.mt-3";
+
+        await FUNCTIONS.screenshot(url, selector)
+            .then(photo => {
+                bot.sendPhoto(chatId, photo, {
+                    caption: `Source: https://etherchain.org/burn`
                 });
             }).catch(err => bot.sendMessage(chatId, `Something went wrong: ${err}`));
     }
