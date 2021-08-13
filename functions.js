@@ -113,8 +113,8 @@ async function screenshot(url, selector, cookies = '') {
             ],
             defaultViewport: {
                 // 4k resolution
-                width: 1920,
-                height: 1080,
+                width: 1366,
+                height: 768,
                 isLandscape: true
             }
         });
@@ -129,7 +129,7 @@ async function screenshot(url, selector, cookies = '') {
         );
 
         // 3. Navigate to URL
-        await page.goto(url, { waitUntil: "networkidle0", timeout: 10000 });
+        await page.goto(url, { waitUntil: "networkidle0", timeout: 25000 });
 
         if (cookies) {
             await page.waitForSelector(cookies);
@@ -152,7 +152,7 @@ async function screenshot(url, selector, cookies = '') {
 
         return name;
     } catch (e) {
-        if (e instanceof TimeoutError) await browser.close();
+        await browser.close();
     }
 }
 
