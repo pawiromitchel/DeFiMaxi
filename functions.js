@@ -95,50 +95,65 @@ function getDate() {
 }
 
 async function screenshot(url, selector, cookies = '') {
-    // 1. Launch the browser and set the resolution
-    const browser = await puppeteer.launch({
-        headless: true,
-        args: ["--no-sandbox"],
-        defaultViewport: {
-            // 4k resolution
-            width: 1920,
-            height: 1080,
-            isLandscape: true
+    // add try catch when there's a timeout
+    // source: https://github.com/puppeteer/puppeteer/issues/4847
+    try {
+        // 1. Launch the browser and set the resolution
+        const browser = await puppeteer.launch({
+            headless: true,
+            args: [
+                "--no-sandbox",
+                '--disable-setuid-sandbox',
+                '--disable-dev-shm-usage',
+                '--disable-accelerated-2d-canvas',
+                '--no-first-run',
+                '--no-zygote',
+                '--single-process', // <- this one doesn't works in Windows
+                '--disable-gpu'
+            ],
+            defaultViewport: {
+                // 4k resolution
+                width: 1920,
+                height: 1080,
+                isLandscape: true
+            }
+        });
+        const name = `./screenshots/${Date.now()}.jpg`;
+
+        // 2. Open a new page
+        const page = (await browser.pages())[0];
+
+        // set useragent to avoid bot detection
+        await page.setUserAgent(
+            'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.97 Safari/537.36'
+        );
+
+        // 3. Navigate to URL
+        await page.goto(url, { waitUntil: "networkidle0", timeout: 10000 });
+
+        if (cookies) {
+            await page.waitForSelector(cookies);
+            await page.click(cookies);
         }
-    });
-    const name = `./screenshots/${Date.now()}.jpg`;
 
-    // 2. Open a new page
-    const page = (await browser.pages())[0];
+        // wait for the selector to load
+        await page.waitForSelector(selector);
+        const selection = await page.$(selector);
 
-    // set useragent to avoid bot detection
-    await page.setUserAgent(
-        'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.97 Safari/537.36'
-    );
+        // 4. Take screenshot
+        await selection.screenshot({
+            path: name,
+            type: "jpeg",
+            fullPage: false
+        });
 
-    // 3. Navigate to URL
-    await page.goto(url, { waitUntil: "networkidle0", timeout: 10000 });
+        await page.close();
+        await browser.close();
 
-    if (cookies) {
-        await page.waitForSelector(cookies);
-        await page.click(cookies);
+        return name;
+    } catch (e) {
+        if (e instanceof TimeoutError) await browser.close();
     }
-
-    // wait for the selector to load
-    await page.waitForSelector(selector);
-    const selection = await page.$(selector);
-
-    // 4. Take screenshot
-    await selection.screenshot({
-        path: name,
-        type: "jpeg",
-        fullPage: false
-    });
-
-    await page.close();
-    await browser.close();
-
-    return name;
 }
 
 module.exports = { getGasPrices, getHealthFactor, randomString, screenshot }
