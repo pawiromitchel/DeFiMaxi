@@ -97,27 +97,28 @@ function getDate() {
 async function screenshot(url, selector, cookies = '') {
     // add try catch when there's a timeout
     // source: https://github.com/puppeteer/puppeteer/issues/4847
+    // 1. Launch the browser and set the resolution
+    const browser = await puppeteer.launch({
+        headless: true,
+        args: [
+            "--no-sandbox",
+            '--disable-setuid-sandbox',
+            '--disable-dev-shm-usage',
+            '--disable-accelerated-2d-canvas',
+            '--no-first-run',
+            '--no-zygote',
+            '--single-process', // <- this one doesn't works in Windows
+            '--disable-gpu'
+        ],
+        defaultViewport: {
+            // 4k resolution
+            width: 1366,
+            height: 768,
+            isLandscape: true
+        }
+    });
+
     try {
-        // 1. Launch the browser and set the resolution
-        const browser = await puppeteer.launch({
-            headless: true,
-            args: [
-                "--no-sandbox",
-                '--disable-setuid-sandbox',
-                '--disable-dev-shm-usage',
-                '--disable-accelerated-2d-canvas',
-                '--no-first-run',
-                '--no-zygote',
-                '--single-process', // <- this one doesn't works in Windows
-                '--disable-gpu'
-            ],
-            defaultViewport: {
-                // 4k resolution
-                width: 1366,
-                height: 768,
-                isLandscape: true
-            }
-        });
         const name = `./screenshots/${Date.now()}.jpg`;
 
         // 2. Open a new page

@@ -99,21 +99,15 @@ What can I, DeFiHelper 😎, do for you?
 💳 Borrowing Health or Ratio
 /health <address> - this will get your borrowing health from different protocols (work in progress)
 
-🩸 Fear and Green Index
-/fear - check how emotional people are in the market.
-        Extreme fear = buying opportunity
-        Extreme greed = correction coming
-
-💰 Total Value Locked
-/tvl - this will show the total TVL across every chain / L2 / sidechain
-/tvl <network> - if you want to check the tvl of only xdai or matic
-/tvl <protocol> - if you wanna see the tvl of Aave for example
-/tvl <group> - check tvl of specific groups like protocols, staking, lending, options, insurance, indexes
-
-📅 Indicators & Data
+📅 Metrics
+/bullrunindex - an index of metrics like the stock-to-flow, NUPL, Google search, Pi cycle top, etc
+/btccycletop - a ML cycle top indicator
 /stocktoflow | /stf - get Bitcoin Stock to Flow model made by PlanB
 /unrealized_profitandloss | /pnl - BTC Unrealized Profit/Loss
 /rhodl - check for market tops
+/fear - check how emotional people are in the market.\nExtreme fear = buying opportunity\nExtreme greed = correction coming
+
+📅 Data
 /longvsshorts - get Long vs Shorts of BTC or ETH
 /ecocalendar - get economic calendar
 /rekt - DeFi hacks leaderboard
@@ -122,11 +116,12 @@ What can I, DeFiHelper 😎, do for you?
 /daotreasury - check what's on the balance sheet of your favorite DAO
 /burn - how much ETH is being burned right now
 
-👀 ChatRoom
-/room <roomname> - this will generate a random room on hack.chat to chat fully anon mode
+💰 Total Value Locked (DeFiLlama)
+/tvl - this will show the total TVL across every chain / L2 / sidechain
+/tvl <network> - if you want to check the tvl of only xdai or matic
+/tvl <protocol> - if you wanna see the tvl of Aave for example
+/tvl <group> - check tvl of specific groups like protocols, staking, lending, options, insurance, indexes
 
-On yeah, my creator is @pawiromitchel 🤗
-He's constantly teaching me new stuff, so be on the lookout for new functionalities
 `);
     }
 
@@ -457,6 +452,46 @@ He's constantly teaching me new stuff, so be on the lookout for new functionalit
             .then(photo => {
                 bot.sendPhoto(chatId, photo, {
                     caption: `Source: https://etherchain.org/burn`
+                });
+            }).catch(err => bot.sendMessage(chatId, `Something went wrong: ${err}`));
+    }
+
+    if (text.includes('/bullrunindex') || text.includes('/topsignal') || text.includes('/cbbi')) {
+        bot.sendMessage(chatId, `Aight G 😉, getting data ...`)
+            .then((chat) => {
+                setTimeout(() => {
+                    bot.deleteMessage(chatId, chat.message_id)
+                }, 10 * 1000) // 10 sec
+            })
+            .catch(err => console.log(err));
+
+        const url = "https://colintalkscrypto.com/cbbi/";
+        let selector = "#chart";
+
+        await FUNCTIONS.screenshot(url, selector)
+            .then(photo => {
+                bot.sendPhoto(chatId, photo, {
+                    caption: `Source: https://colintalkscrypto.com/cbbi/\n\nAn "index" is an indicator based on a portfolio of metrics. The CBBI is an average of 11 different metrics. It helps us understand what stage of the Bitcoin bull run and bear market cycles we are in.`
+                });
+            }).catch(err => bot.sendMessage(chatId, `Something went wrong: ${err}`));
+    }
+
+    if (text.includes('/btccycletop')) {
+        bot.sendMessage(chatId, `Aight G 😉, getting data ...`)
+            .then((chat) => {
+                setTimeout(() => {
+                    bot.deleteMessage(chatId, chat.message_id)
+                }, 10 * 1000) // 10 sec
+            })
+            .catch(err => console.log(err));
+
+        const url = "https://btcpredict.monicz.pl/";
+        let selector = "body > div > div.prediction";
+
+        await FUNCTIONS.screenshot(url, selector)
+            .then(photo => {
+                bot.sendPhoto(chatId, photo, {
+                    caption: `Source: https://btcpredict.monicz.pl/\n\nThis is a Bitcoin bull run prediction project which aims to evaluate current bull run's peak price alongside the exact date. The project consists of two individual machine-learning models trained on the Bitcoin's historical pricing and block halving data.`
                 });
             }).catch(err => bot.sendMessage(chatId, `Something went wrong: ${err}`));
     }
