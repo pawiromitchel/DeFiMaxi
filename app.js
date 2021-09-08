@@ -93,98 +93,6 @@ bot.on('message', async (msg) => {
         bot.sendMessage(chatId, MESSAGES.info);
     }
 
-    // get TVL from defillama
-    if (text.includes('/tvl')) {
-        let url;
-        let selector;
-
-        // url paths
-        const TVL = "https://defillama.com/home";
-        const MULTI = "https://defillama.com/protocols";
-        const ONE = "https://defillama.com/protocol";
-
-        // selectors to get data
-        let selectorTables = "#center > div > div > div.sc-fYxtnH.cXooYa.css-vurnku";
-        let selectorDashboard = "#center > div > div.sc-ckVGcZ.bDWbWv > div > div.sc-ifAKCX.sc-bZQynM.sc-dnqmqq.kYubLu";
-        let selectorSingle = "#center > div > div.sc-ckVGcZ.bDWbWv > div.sc-feJyhm.dBBDPo > div.sc-iELTvK.ifHHTx";
-
-        if (args[1]) {
-            selector = selectorTables;
-            switch (args[1]) {
-                case "protocols":
-                    url = `${MULTI}/protocols`;
-                    break;
-                case "dex":
-                case "dexes":
-                    url = `${MULTI}/dexes`;
-                    break;
-                case "lending":
-                    url = `${MULTI}/lending`;
-                    break;
-                case "yield":
-                    url = `${MULTI}/yield`;
-                    break;
-                case "insurance":
-                    url = `${MULTI}/insurance`;
-                    break;
-                case "options":
-                    url = `${MULTI}/options`;
-                    break;
-                case "indexes":
-                    url = `${MULTI}/indexes`;
-                    break;
-                case "staking":
-                    url = `${MULTI}/staking`;
-                    break;
-                case "eth":
-                case "ethereum":
-                    url = `https://defillama.com/chain/Ethereum`;
-                    selector = selectorDashboard;
-                    break;
-                case "bsc":
-                case "binance":
-                    url = `https://defillama.com/chain/Binance`;
-                    selector = selectorDashboard;
-                    break;
-                case "sol":
-                case "solana":
-                    url = `https://defillama.com/chain/Solana`;
-                    selector = selectorDashboard;
-                    break;
-                case "matic":
-                case "polygon":
-                    url = `https://defillama.com/chain/Polygon`;
-                    selector = selectorDashboard;
-                    break;
-                case "ftm":
-                    url = `https://defillama.com/chain/Fantom`;
-                    selector = selectorDashboard;
-                    break;
-                case "xdai":
-                    url = `https://defillama.com/chain/xDai`;
-                    selector = selectorDashboard;
-                    break;
-                case "rsk":
-                    url = `https://defillama.com/chain/RSK`;
-                    selector = selectorDashboard;
-                    break;
-                default:
-                    url = `${ONE}/${args[1]}`;
-                    selector = selectorSingle;
-                    break;
-            }
-        } else {
-            // if there's no protocol specified, show all
-            url = TVL;
-            selector = selectorDashboard;
-        }
-        await FUNCTIONS.screenshot(url, selector).then(photo => {
-            bot.sendPhoto(chatId, photo, {
-                caption: `Source: ${url}`
-            });
-        });
-    }
-
     if (text.includes('/longvsshorts')) {
         const url = "https://blockchainwhispers.com/bitmex-position-calculator";
         const BTC = "body > section > div > div:nth-child(3)";
@@ -287,18 +195,6 @@ bot.on('message', async (msg) => {
             .then(photo => {
                 bot.sendPhoto(chatId, photo, {
                     caption: `Source: ${url}`
-                });
-            }).catch(err => bot.sendMessage(chatId, `Something went wrong: ${err}`));
-    }
-
-    if (text.includes('/ecocalendar')) {
-        const url = "https://global-premium.econoday.com/byweek.asp?cust=global-premium&lid=0";
-        let selector = "body > table > tbody > tr:nth-child(4) > td > table:nth-child(1)";
-
-        await FUNCTIONS.screenshot(url, selector)
-            .then(photo => {
-                bot.sendPhoto(chatId, photo, {
-                    caption: `Timezone is GMT -5:00 ET\nSource: ${url}`
                 });
             }).catch(err => bot.sendMessage(chatId, `Something went wrong: ${err}`));
     }
