@@ -2,8 +2,9 @@ const TelegramBot = require('node-telegram-bot-api');
 const cron = require('node-cron');
 
 const CONFIG = require('./config');
-const FUNCTIONS = require('./functions');
-const DB = require('./handleData');
+const FUNCTIONS = require('./utils/functions');
+const DB = require('./utils/handleData');
+const MESSAGES = require('./utils/constants')
 
 const token = CONFIG.TELEGRAM_BOT_TOKEN;
 // Create a bot that uses 'polling' to fetch new updates
@@ -89,52 +90,11 @@ bot.on('message', async (msg) => {
 
     // send info about the bot
     if (text.includes('/info')) {
-        bot.sendMessage(chatId, `Hello master ${msg.from.first_name} 👋,
-What can I, DeFiHelper 😎, do for you?
-
-⛽ Gas prices
-/gas <chain> - get gas price from a specified chain, default will be ethereum
-/level <number> - get an alert when hourly gas price is below your target
-
-💳 Borrowing Health or Ratio
-/health <address> - this will get your borrowing health from different protocols (work in progress)
-
-📅 Metrics
-/bullrunindex - an index of metrics like the stock-to-flow, NUPL, Google search, Pi cycle top, etc
-/btccycletop - a ML cycle top indicator
-/stocktoflow | /stf - get Bitcoin Stock to Flow model made by PlanB
-/unrealized_profitandloss | /pnl - BTC Unrealized Profit/Loss
-/rhodl - check for market tops
-/fear - check how emotional people are in the market.\nExtreme fear = buying opportunity\nExtreme greed = correction coming
-
-📅 Data
-/longvsshorts - get Long vs Shorts of BTC or ETH
-/ecocalendar - get economic calendar
-/rekt - DeFi hacks leaderboard
-/stakers - how many stakers does your blockchain have?
-/fees <protocol> - how much fees are people paying?
-/daotreasury - check what's on the balance sheet of your favorite DAO
-/burn - how much ETH is being burned right now
-
-💰 Total Value Locked (DeFiLlama)
-/tvl - this will show the total TVL across every chain / L2 / sidechain
-/tvl <network> - if you want to check the tvl of only xdai or matic
-/tvl <protocol> - if you wanna see the tvl of Aave for example
-/tvl <group> - check tvl of specific groups like protocols, staking, lending, options, insurance, indexes
-
-`);
+        bot.sendMessage(chatId, MESSAGES.info);
     }
 
     // get TVL from defillama
     if (text.includes('/tvl')) {
-        bot.sendMessage(chatId, `Aight G 😉, getting data ...`)
-            .then((chat) => {
-                setTimeout(() => {
-                    bot.deleteMessage(chatId, chat.message_id)
-                }, 10 * 1000) // 10 sec
-            })
-            .catch(err => console.log(err));
-
         let url;
         let selector;
 
@@ -226,14 +186,6 @@ What can I, DeFiHelper 😎, do for you?
     }
 
     if (text.includes('/longvsshorts')) {
-        bot.sendMessage(chatId, `Aight G 😉, getting data ...`)
-            .then((chat) => {
-                setTimeout(() => {
-                    bot.deleteMessage(chatId, chat.message_id)
-                }, 10 * 1000) // 10 sec
-            })
-            .catch(err => console.log(err));
-
         const url = "https://blockchainwhispers.com/bitmex-position-calculator";
         const BTC = "body > section > div > div:nth-child(3)";
         const ETH = "body > section > div > div.bcw-calculator-longs-shorts.eth.my-3";
@@ -265,14 +217,6 @@ What can I, DeFiHelper 😎, do for you?
     }
 
     if (text.includes('/rekt')) {
-        bot.sendMessage(chatId, `Aight G 😉, getting data ...`)
-            .then((chat) => {
-                setTimeout(() => {
-                    bot.deleteMessage(chatId, chat.message_id)
-                }, 10 * 1000) // 10 sec
-            })
-            .catch(err => console.log(err));
-
         const url = "https://www.rekt.news/leaderboard/";
         let selector = "#__next > div > main > div > ol";
 
@@ -285,14 +229,6 @@ What can I, DeFiHelper 😎, do for you?
     }
 
     if (text.includes('/stocktoflow') || text.includes('/stf')) {
-        bot.sendMessage(chatId, `Aight G 😉, getting data ...`)
-            .then((chat) => {
-                setTimeout(() => {
-                    bot.deleteMessage(chatId, chat.message_id)
-                }, 10 * 1000) // 10 sec
-            })
-            .catch(err => console.log(err));
-
         const url = "https://decentrader.com/charts/stock-to-flow-model/";
         let selector = "#graph > div > div";
         let cookieSelector = "#gdpr-cookie-accept";
@@ -306,14 +242,6 @@ What can I, DeFiHelper 😎, do for you?
     }
 
     if (text.includes('/unrealized_profitandloss') || text.includes('/pnl')) {
-        bot.sendMessage(chatId, `Aight G 😉, getting data ...`)
-            .then((chat) => {
-                setTimeout(() => {
-                    bot.deleteMessage(chatId, chat.message_id)
-                }, 10 * 1000) // 10 sec
-            })
-            .catch(err => console.log(err));
-
         const url = "https://decentrader.com/charts/relative-unrealized-profit-loss/";
         let selector = "#graph > div > div";
         let cookieSelector = "#gdpr-cookie-accept";
@@ -327,14 +255,6 @@ What can I, DeFiHelper 😎, do for you?
     }
 
     if (text.includes('/rhodl')) {
-        bot.sendMessage(chatId, `Aight G 😉, getting data ...`)
-            .then((chat) => {
-                setTimeout(() => {
-                    bot.deleteMessage(chatId, chat.message_id)
-                }, 10 * 1000) // 10 sec
-            })
-            .catch(err => console.log(err));
-
         const url = "https://decentrader.com/charts/rhodl-ratio/";
         let selector = "#graph > div > div";
         let cookieSelector = "#gdpr-cookie-accept";
@@ -348,14 +268,6 @@ What can I, DeFiHelper 😎, do for you?
     }
 
     if (text.includes('/stakers')) {
-        bot.sendMessage(chatId, `Aight G 😉, getting data ...`)
-            .then((chat) => {
-                setTimeout(() => {
-                    bot.deleteMessage(chatId, chat.message_id)
-                }, 10 * 1000) // 10 sec
-            })
-            .catch(err => console.log(err));
-
         const url = "https://stakers.info/";
         let selector = "#__next > div > main > div.jsx-3513597878.list";
 
@@ -368,14 +280,6 @@ What can I, DeFiHelper 😎, do for you?
     }
 
     if (text.includes('/daotreasury')) {
-        bot.sendMessage(chatId, `Aight G 😉, getting data ...`)
-            .then((chat) => {
-                setTimeout(() => {
-                    bot.deleteMessage(chatId, chat.message_id)
-                }, 10 * 1000) // 10 sec
-            })
-            .catch(err => console.log(err));
-
         const url = "https://open-orgs.info/";
         let selector = "#__next > div > main > div.jsx-3513597878.list";
 
@@ -388,14 +292,6 @@ What can I, DeFiHelper 😎, do for you?
     }
 
     if (text.includes('/ecocalendar')) {
-        bot.sendMessage(chatId, `Aight G 😉, getting data ...`)
-            .then((chat) => {
-                setTimeout(() => {
-                    bot.deleteMessage(chatId, chat.message_id)
-                }, 10 * 1000) // 10 sec
-            })
-            .catch(err => console.log(err));
-
         const url = "https://global-premium.econoday.com/byweek.asp?cust=global-premium&lid=0";
         let selector = "body > table > tbody > tr:nth-child(4) > td > table:nth-child(1)";
 
@@ -408,14 +304,6 @@ What can I, DeFiHelper 😎, do for you?
     }
 
     if (text.includes('/fees')) {
-        bot.sendMessage(chatId, `Aight G 😉, getting data ...`)
-            .then((chat) => {
-                setTimeout(() => {
-                    bot.deleteMessage(chatId, chat.message_id)
-                }, 10 * 1000) // 10 sec
-            })
-            .catch(err => console.log(err));
-
         let url = "https://cryptofees.info/";
         const ALL = "#__next > div > main > div.jsx-2013905549.list";
         const ONE = "#__next > div > main";
@@ -437,14 +325,6 @@ What can I, DeFiHelper 😎, do for you?
     }
 
     if (text.includes('/burn')) {
-        bot.sendMessage(chatId, `Aight G 😉, getting data ...`)
-            .then((chat) => {
-                setTimeout(() => {
-                    bot.deleteMessage(chatId, chat.message_id)
-                }, 10 * 1000) // 10 sec
-            })
-            .catch(err => console.log(err));
-
         const url = "https://etherchain.org/burn";
         let selector = "#app > div.card.mt-3";
 
@@ -457,14 +337,6 @@ What can I, DeFiHelper 😎, do for you?
     }
 
     if (text.includes('/bullrunindex') || text.includes('/topsignal') || text.includes('/cbbi')) {
-        bot.sendMessage(chatId, `Aight G 😉, getting data ...`)
-            .then((chat) => {
-                setTimeout(() => {
-                    bot.deleteMessage(chatId, chat.message_id)
-                }, 10 * 1000) // 10 sec
-            })
-            .catch(err => console.log(err));
-
         const url = "https://colintalkscrypto.com/cbbi/";
         let selector = "#chart";
 
@@ -477,14 +349,6 @@ What can I, DeFiHelper 😎, do for you?
     }
 
     if (text.includes('/btccycletop')) {
-        bot.sendMessage(chatId, `Aight G 😉, getting data ...`)
-            .then((chat) => {
-                setTimeout(() => {
-                    bot.deleteMessage(chatId, chat.message_id)
-                }, 10 * 1000) // 10 sec
-            })
-            .catch(err => console.log(err));
-
         const url = "https://btcpredict.monicz.pl/";
         let selector = "body > div > div.prediction";
 

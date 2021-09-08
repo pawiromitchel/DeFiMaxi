@@ -2,7 +2,7 @@ const axios = require('axios');
 const puppeteer = require('puppeteer-extra');
 const AdblockerPlugin = require('puppeteer-extra-plugin-adblocker')
 puppeteer.use(AdblockerPlugin())
-const CONFIG = require('./config');
+const CONFIG = require('../config');
 const ZAPPER_ENDPOINT = "https://api.zapper.fi/v1/";
 
 async function getGasPrices(network) {
