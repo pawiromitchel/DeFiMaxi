@@ -255,6 +255,33 @@ bot.on('message', async (msg) => {
                 });
             }).catch(err => bot.sendMessage(chatId, `Something went wrong: ${err}`));
     }
+
+    if (text.includes('/gimmedata')) {
+        bot.sendPhoto(chatId, `https://alternative.me/crypto/fear-and-greed-index.png?a=${Date.now()}`, {
+            caption: "Source: https://alternative.me/crypto/fear-and-greed-index/"
+        })
+
+        const url = "https://colintalkscrypto.com/cbbi/";
+        let selector = "#chart";
+
+        await FUNCTIONS.screenshot(url, selector)
+            .then(photo => {
+                bot.sendPhoto(chatId, photo, {
+                    caption: `Source: https://colintalkscrypto.com/cbbi/\n\nAn "index" is an indicator based on a portfolio of metrics. The CBBI is an average of 11 different metrics. It helps us understand what stage of the Bitcoin bull run and bear market cycles we are in.`
+                });
+            }).catch(err => bot.sendMessage(chatId, `Something went wrong: ${err}`));
+
+        const url = "https://decentrader.com/charts/stock-to-flow-model/";
+        let selector = "#graph > div > div";
+        let cookieSelector = "#gdpr-cookie-accept";
+
+        await FUNCTIONS.screenshot(url, selector, cookieSelector)
+            .then(photo => {
+                bot.sendPhoto(chatId, photo, {
+                    caption: `The stock-to-flow line on this chart incorporates a 365-day average into the model to smooth out the changes caused in the market by the halving events.\nSource: ${url}`
+                });
+            }).catch(err => bot.sendMessage(chatId, `Something went wrong: ${err}`));
+    }
 });
 
 // check gas every hour
