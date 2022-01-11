@@ -34,6 +34,35 @@ async function getGasPrices(network) {
     }
 }
 
+async function getRates(protocol, network){
+    switch (network) {
+        case "eth":
+        case "ethereum":
+            network = "ethereum"
+            break;
+        case "matic":
+        case "polygon":
+            network = "polygon"
+            break;
+        case "bnb":
+        case "bsc":
+        case "binance":
+            network = "binance-smart-chain"
+            break;
+        default:
+            network = false;
+            break;
+    }
+
+    if (network) {
+        const res = await axios.get(`${ZAPPER_ENDPOINT}protocols/${protocol}/token-market-data?network=${network}&api_key=${CONFIG.ZAPPER_API_KEY}&type=interest-bearing`);
+        const data = res.data;
+        return data;
+    } else {
+        return false;
+    }
+}
+
 async function getHealthFactor(address) {
     let text = `::HEALTH FACTOR::\n`;
 
@@ -157,4 +186,4 @@ async function screenshot(url, selector, cookies = '') {
     }
 }
 
-module.exports = { getGasPrices, getHealthFactor, randomString, screenshot }
+module.exports = { getGasPrices, getRates, getHealthFactor, randomString, screenshot }

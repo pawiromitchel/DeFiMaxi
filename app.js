@@ -1,5 +1,6 @@
 const TelegramBot = require('node-telegram-bot-api');
 const cron = require('node-cron');
+const { table } = require('table');
 
 const CONFIG = require('./config');
 const FUNCTIONS = require('./utils/functions');
@@ -18,7 +19,6 @@ bot.on('message', async (msg) => {
     // Get gas price from eth, bsc or matic
     if (text.includes('/gas')) {
         let network = args[1] ? args[1] : 'ethereum';
-        console.log(args[1]);
         let gasPrices = await FUNCTIONS.getGasPrices(network);
 
         if (gasPrices) {
@@ -271,17 +271,36 @@ bot.on('message', async (msg) => {
                 });
             }).catch(err => bot.sendMessage(chatId, `Something went wrong: ${err}`));
 
-        const url = "https://decentrader.com/charts/stock-to-flow-model/";
-        let selector = "#graph > div > div";
-        let cookieSelector = "#gdpr-cookie-accept";
+        const url2 = "https://decentrader.com/charts/stock-to-flow-model/";
+        let selector2 = "#graph > div > div";
+        let cookieSelector2 = "#gdpr-cookie-accept";
 
-        await FUNCTIONS.screenshot(url, selector, cookieSelector)
+        await FUNCTIONS.screenshot(url2, selector2, cookieSelector2)
             .then(photo => {
                 bot.sendPhoto(chatId, photo, {
                     caption: `The stock-to-flow line on this chart incorporates a 365-day average into the model to smooth out the changes caused in the market by the halving events.\nSource: ${url}`
                 });
             }).catch(err => bot.sendMessage(chatId, `Something went wrong: ${err}`));
     }
+
+    if (text.includes('/lendingrates')) {
+        let network = args[1] ? args[1] : 'polygon';
+        let protocol = args[2] ? args[2] : 'aave-v2';
+
+        await FUNCTIONS.getRates(protocol, network)
+            .then(res => {
+                if (res) {
+                    let rates = [];
+                    rates.push(['Token', 'Supply', 'Borrow']);
+                    res.forEach(rate => rates.push([`${rate.tokens[0].symbol}`, `${(rate.supplyApy * 100).toFixed(2)}%`, `${(rate.borrowApy * 100).toFixed(2)}%`]));
+                    bot.sendMessage(chatId, `<pre>Network: ${network}\nProtocol: ${protocol}\n${table(rates)}</pre>`, {
+                        parse_mode: 'HTML'
+                    })
+                }
+            })
+            .catch(err => bot.sendMessage(chatId, `Something went wrong: ${err}`));
+    }
+
 });
 
 // check gas every hour
