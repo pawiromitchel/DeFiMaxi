@@ -293,7 +293,7 @@ bot.on('message', async (msg) => {
                     let rates = [];
                     rates.push(['Token', 'Supply', 'Borrow']);
                     res.forEach(rate => rates.push([`${rate.tokens[0].symbol}`, `${(rate.supplyApy * 100).toFixed(2)}%`, `${(rate.borrowApy * 100).toFixed(2)}%`]));
-                    bot.sendMessage(chatId, `<pre>Network: ${network}\nProtocol: ${protocol}\n${table(rates)}</pre>`, {
+                    bot.sendMessage(chatId, `<pre>Network: ${network.toUpperCase()}\nProtocol: ${protocol.toUpperCase()}\n${table(rates)}\nSource: Zapper API</pre>`, {
                         parse_mode: 'HTML'
                     })
                 }
