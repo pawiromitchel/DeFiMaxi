@@ -7,6 +7,8 @@ const FUNCTIONS = require('./utils/functions');
 const DB = require('./utils/handleData');
 const MESSAGES = require('./utils/constants')
 
+const fs = require('fs');
+
 const token = CONFIG.TELEGRAM_BOT_TOKEN;
 // Create a bot that uses 'polling' to fetch new updates
 const bot = new TelegramBot(token, { polling: true });
@@ -331,4 +333,29 @@ cron.schedule('00 * * * *', async () => {
     } else {
         console.log(`No users to send alert to`);
     }
+});
+
+async function getAndSaveLendingRates(network, protocol) {
+    await FUNCTIONS.getRates(protocol, network)
+        .then(res => {
+            if (res) {
+                let currDate = FUNCTIONS.getCurrDate();
+                res.forEach(rate => {
+                    const dataToWrite = [currDate, rate.tokens[0].symbol, rate.supplyApy, rate.borrowApy, network, protocol];
+                    fs.appendFile('./utils/rates.csv', dataToWrite.join(',') + '\n', 'utf8', function (err) {
+                        if (err) {
+                            console.log('Some error occured - file either not saved or corrupted file saved.');
+                        }
+                    });
+                });
+            }
+        })
+        .catch(err => console.error(`Something went wrong: ${err}`));
+}
+
+// record every 6 hours
+cron.schedule('0 */6 * * *', async () => {
+    getAndSaveLendingRates('polygon', 'aave-v2')
+    getAndSaveLendingRates('ethereum', 'aave-v2')
+    getAndSaveLendingRates('ethereum', 'compound')
 });
